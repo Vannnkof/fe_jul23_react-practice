@@ -35,6 +35,7 @@ const products = productsFromServer.map((product) => {
 export const App = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [query, setQuery] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const visibleProducts = products
     .filter(product => product.categoria.user.name.includes(selectedUser))
@@ -63,57 +64,21 @@ export const App = () => {
                 All
               </a>
 
-              <a
-                onClick={() => {
-                  setSelectedUser('Roma');
-                }}
-                data-cy="FilterUser"
-                href="#/"
-                className={cn({
-                  'is-active': selectedUser === 'Roma',
-                })}
-              >
-                Roma
-              </a>
-
-              <a
-                onClick={() => {
-                  setSelectedUser('Anna');
-                }}
-                data-cy="FilterUser"
-                href="#/"
-                className={cn({
-                  'is-active': selectedUser === 'Anna',
-                })}
-              >
-                Anna
-              </a>
-
-              <a
-                onClick={() => {
-                  setSelectedUser('Max');
-                }}
-                data-cy="FilterUser"
-                href="#/"
-                className={cn({
-                  'is-active': selectedUser === 'Max',
-                })}
-              >
-                Max
-              </a>
-
-              <a
-                onClick={() => {
-                  setSelectedUser('John');
-                }}
-                data-cy="FilterUser"
-                href="#/"
-                className={cn({
-                  'is-active': selectedUser === 'John',
-                })}
-              >
-                John
-              </a>
+              {usersFromServer.map(user => (
+                <a
+                  key={user.id}
+                  onClick={() => {
+                    setSelectedUser(user.name);
+                  }}
+                  data-cy="FilterUser"
+                  href="#/"
+                  className={cn({
+                    'is-active': selectedUser === user.name,
+                  })}
+                >
+                  {user.name}
+                </a>
+              ))}
             </p>
 
             <div className="panel-block">
@@ -153,36 +118,27 @@ export const App = () => {
                 All
               </a>
 
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1 is-info"
-                href="#/"
-              >
-                Category 1
-              </a>
-
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1"
-                href="#/"
-              >
-                Category 2
-              </a>
-
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1 is-info"
-                href="#/"
-              >
-                Category 3
-              </a>
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1"
-                href="#/"
-              >
-                Category 4
-              </a>
+              {categoriesFromServer.map(categor => (
+                <a
+                  key={categor.id}
+                  data-cy="Category"
+                  className={cn('button mr-2 my-1', {
+                    'is-info': selectedCategories.includes(categor.title),
+                  })}
+                  href="#/"
+                  onClick={() => {
+                    setSelectedCategories(prevArray => (
+                      [
+                        ...prevArray,
+                        categor.title,
+                      ]
+                    ));
+                  }}
+                >
+                  {categor.title}
+                </a>
+              ))
+              }
             </div>
 
             <div className="panel-block">
