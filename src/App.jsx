@@ -39,7 +39,8 @@ export const App = () => {
 
   const visibleProducts = products
     .filter(product => product.categoria.user.name.includes(selectedUser))
-    .filter(product => product.name.includes(query));
+    .filter(product => product.name
+      .toLowerCase().includes(query.toLowerCase()));
 
   return (
     <div className="section">
@@ -104,6 +105,9 @@ export const App = () => {
                     data-cy="ClearButton"
                     type="button"
                     className="delete"
+                    onClick={() => {
+                      setQuery('');
+                    }}
                   />
                 </span>
               </p>
@@ -127,12 +131,18 @@ export const App = () => {
                   })}
                   href="#/"
                   onClick={() => {
-                    setSelectedCategories(prevArray => (
-                      [
-                        ...prevArray,
-                        categor.title,
-                      ]
-                    ));
+                    setSelectedCategories((prevArray) => {
+                      if (prevArray.includes(categor.title)) {
+                        const ind = prevArray.indexOf(categor.title);
+                        const newArr = [...prevArray];
+
+                        newArr[ind] = '';
+
+                        return newArr;
+                      }
+
+                      return [...prevArray, categor.title];
+                    });
                   }}
                 >
                   {categor.title}
@@ -149,6 +159,7 @@ export const App = () => {
                 onClick={() => {
                   setQuery('');
                   setSelectedUser('');
+                  setSelectedCategories([]);
                 }}
               >
                 Reset all filters
